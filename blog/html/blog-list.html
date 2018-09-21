@@ -1,0 +1,246 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="initial-scale=1,width=device-width,user-scalable=no,maximum-scale=1">
+    <meta name="author" content="{{ meta_author }}">
+    <meta name="description" content="{{ page_meta.meta_description }}">
+    <meta name="generator" content="HubSpot">
+    <title>{{ page_meta.html_title }}</title>
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ get_public_template_url('Custom/Page/2018/Blog/assets/css/blog-list.css') }}">
+    
+    <!-- hs -->
+    {{ standard_header_includes|cut('/hs/hsstatic/jquery-libs/static-1.4/jquery/jquery-1.11.2.js')|cut('/hs/hsstatic/content_shared_assets/static-1.4077/css/public_common.css')|cut('https://fonts.googleapis.com/css?family=Lato:300,400,700')|cut('//platform.linkedin.com/in.js')|cut("hsjQuery = window['jQuery']") }}
+    <!-- /hs -->
+
+  </head>
+  <body class=" {{ builtin_body_classes }} {{ topic.name }}">
+    {% set blog_url = 'blog-2018' %}
+    <!--
+    {% module "module_153256898998711" module_id="3435629" label="Blog - Feedback Button" %}
+    -->
+    <!-- mobile header module -->
+    {% module "module_153050250773974" module_id="2514054" label="Redesign 2018 - Mobile Header" %}
+    <!-- main header modulde -->
+    {% module "module_153050256659190" module_id="2497045" label="2018 - Homepage Header" %}
+    
+    <!-- content -->
+    {% if !blog_author %}
+    <div class="main-content">
+      <div class="intro-block">
+        <div class="container">
+          <h1 class="blog-title">Employee Engagement & Company Culture Blog</h1>
+        </div>
+      </div>
+      
+      {% set most_popular_posts = blog_recent_topic_posts('default', 'most-popular', 5) %}
+      {% if most_popular_posts|length > 0 && !topic %}
+      <div class="most-popular-block content-block">
+        <div class="container">
+          <h2>Most Popular</h2>
+            <div class="popular-posts" id="popular-posts">
+              {% for post in most_popular_posts %}
+                <div class="post">
+                  <div class="thumb">
+                    <a href="{{ post.absolute_url }}"><img data-lazy="{{ post.featured_image }}" alt="" width="800"></a>
+                  </div>
+                  <div class="post-content">
+                    <h3 class="post-title"><a href="{{ post.absolute_url }}">{{ post.name }}</a></h3>
+                    <ul>
+                      <li>
+                        <span><a href="/{{ blog_url }}/author/{{ post.blog_post_author.slug }}">{{ post.blog_post_author.display_name }}</a></span>
+                      </li>
+                      <li>
+                        <span>{{ post.publish_date_local_time|datetimeformat('%b %e, %Y') }}</span>
+                      </li>
+                      <li>
+                        <span class="reading-time">{{ post.post_body|wordcount|divide(200) }} MIN READ</span>
+                      </li>
+                    </ul>
+                    <p><a href="{{ post.absolute_url }}">{{ post.post_list_content|striptags|trim|truncate(400) }}</a></p>
+                    <a class="btn btn-primary" href="{{ post.absolute_url }}">Read Article</a>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+      </div>
+      {% endif %}
+
+      {% set blog_post_ids = request.cookies['saved-articles']|split('-') %}
+      <div class="most-recent-block content-block">
+        <div class="container">
+          {% if topic %}
+          	{% set topicName = page_meta.html_title|replace('Blog 2018 | ', '') %} 
+          	<h2>
+              {{ topicName }}
+              {% if topicName == "Saved Articles" %}
+              <span class="num_saved"> ({{blog_post_ids|length}})</span>
+              {% endif %}
+            </h2>
+          {% else %}
+          	<h2>Most Recent</h2>
+          {% endif %}
+          <div class="tools">
+            <!--
+            <div class="search-tool tool" id="search-tool">
+              <a href="#"><i class="fa fa-search"></i></a>
+              <input type="text" name="q" id="search-post" class="search-input" placeholder="Search in Blog" />
+            </div>
+            -->
+            {% if topic != "saved-articles" %}
+            <div class="save-tool tool">
+              <a href="/blog-2018/tag/saved-articles"><i class="fas fa-book-open"></i><span>Saved Articles</span><span class="num_saved"> ({{blog_post_ids|length}})</span></a>
+            </div>
+            {% endif %}
+          </div>
+
+          {% if topic == "saved-articles" %}
+            <div class="no-saved-articles">
+              <p>There is no saved articles.<br>Please use &nbsp;&nbsp;<i class="not-saved-icon far fa-bookmark"></i>&nbsp;&nbsp; button on each article to save for reading later.</p>
+            </div>
+          {% endif %}
+
+          <div class="recent-posts posts-list" id="recent-posts">
+            {% if topic == "saved-articles" %}
+              {% for post_id in blog_post_ids %}
+                {% set saved_post = blog_post_by_id(post_id) %}
+                <div class="post" id="{{ saved_post.id }}">
+                  <div class="thumb">
+                    <a class="thumbnail-img" href="{{ post.absolute_url }}">
+                      <div class="img"></div>
+                      <noscript><img src="{{ saved_post.featured_image }}" width="690" /></noscript>
+                    </a>
+                    <div class="date">{{ saved_post.publish_date_local_time|datetimeformat('%b %e') }}</div>
+                    <div class="topic">
+                      {% for topic in saved_post.topic_list %}
+                        {% if loop.index == 1 %}
+                          <a href="{{ group.absolute_url }}/topic/{{ topic.slug }}">{{ topic.name }}</a>
+                        {% endif %}
+                      {% endfor %}
+                    </div>
+                  </div>
+                  <div class="post-content">
+                    <h3 class="post-title"><a href="{{ saved_post.absolute_url }}">{{ saved_post.name }}</a></h3>
+                    <p class="post-desc"><a href="{{ post.absolute_url }}">{{ saved_post.post_list_content|striptags|trim }}</a></p>
+                  </div>
+                  <div class="post-meta">
+                    <ul>
+                      <li class="author">
+                        <img src="{{ saved_post.blog_post_author.avatar }}" alt="" width="64" height="64">
+                        <a href="/{{ blog_url }}/author/{{ saved_post.blog_post_author.slug }}">{{ saved_post.blog_post_author.display_name }}</a>
+                      </li>
+                      <li class="reading-time">
+                        <span>{{ saved_post.post_body|wordcount|divide(200) }} min read</span>
+                      </li>
+                      <li class="save-post">
+                        <a title="Save this article" href="#"><i class="not-saved-icon far fa-bookmark"></i></a>
+                        <a title="Unsave this article" href="#"><i class="fas fa-bookmark saved-icon"></i></a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              {% endfor %}
+            {% else %}
+              {% for post in contents %}
+                <div class="post" id="{{ post.id }}">
+                  <div class="thumb">
+                    <a class="thumbnail-img" href="{{ post.absolute_url }}">
+                      <div class="img"></div>
+                      <noscript><img src="{{ post.featured_image }}" width="690" /></noscript>
+                    </a>
+                    <div class="date">{{ post.publish_date_local_time|datetimeformat('%b %e') }}</div>
+                    <div class="topic">
+                      {% for topic in post.topic_list %}
+                        {% if loop.index == 1 %}
+                        <a href="{{ group.absolute_url }}/topic/{{ topic.slug }}">{{ topic.name }}</a>
+                        {% endif %}
+                      {% endfor %}
+                    </div>
+                  </div>
+                  <div class="post-content">
+                    <h3 class="post-title"><a href="{{ post.absolute_url }}">{{ post.name }}</a></h3>
+                    <p class="post-desc"><a href="{{ post.absolute_url }}">{{ post.post_list_content|striptags|trim }}</a></p>
+                  </div>
+                  <div class="post-meta">
+                    <ul>
+                      <li class="author">
+                        <img src="{{ post.blog_post_author.avatar }}" alt="" width="64" height="64">
+                        <a href="/{{ blog_url }}/author/{{ post.blog_post_author.slug }}">{{ post.blog_post_author.display_name }}</a>
+                      </li>
+                      <li class="reading-time">
+                        <span>{{ post.post_body|wordcount|divide(200) }} min read</span>
+                      </li>
+                      <li class="save-post">
+                        <a title="Save this article" href="#"><i class="not-saved-icon far fa-bookmark"></i></a>
+                        <a title="Unsave this article" href="#"><i class="fas fa-bookmark saved-icon"></i></a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              {% endfor %}
+            {% endif %}
+          </div>
+
+          <div class="load-more" {% if topic == "saved-articles" %} style="display: none;" {% endif %}>
+            <a href="#">
+              Load More
+              <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+    <!-- // content -->
+
+    <!-- Setup for paginations to work -->
+    {% set total_pages = contents.total_page_count %} <!-- sets variable for total pages -->
+    {% set more_pages = total_pages - current_page_num %} <!-- sets variable for how many more pages are past the current pages -->
+    {% if total_pages > 1 %}
+    <nav style="display: none;">
+      <ul class="pagination">
+        <li class="{% if current_page_num == 1 %}disabled{% endif %}"><a href="{% if last_page_num=="1" %}{{ group.absolute_url }}{% else %}{{blog_page_link(last_page_num)}}{% endif %}"><i class="fa fa-angle-double-left"></i></a></li>
+                              
+        {% if more_pages == 0 %}
+            {% if current_page_num - 4 == 1 %}<li><a href="{{ group.absolute_url }}">{{ current_page_num - 4 }}</a></li>{% endif %}
+            {% if current_page_num - 4 > 1 %}<li><a href="{{ blog_page_link(current_page_num - 4) }}">{{ current_page_num - 4 }}</a></li>{% endif %}
+        {% endif %}
+        {% if more_pages <= 1 %}
+            {% if current_page_num - 3 == 1 %}<li><a href="{{ group.absolute_url }}">{{ current_page_num - 3 }}</a></li>{% endif %}
+            {% if current_page_num - 3 > 1 %}<li><a href="{{ blog_page_link(current_page_num - 3) }}">{{ current_page_num - 3 }}</a></li>{% endif %}
+        {% endif %}
+        {% if current_page_num - 2 == 1 %}<li><a href="{{ group.absolute_url }}">{{ current_page_num - 2 }}</a></li>{% endif %}
+        {% if current_page_num - 2 > 1 %}<li><a href="{{ blog_page_link(current_page_num - 2) }}">{{ current_page_num - 2 }}</a></li>{% endif %}
+        {% if current_page_num - 1 == 1 %}<li><a href="{{ group.absolute_url }}">{{ current_page_num - 1 }}</a></li>{% endif %}
+        {% if current_page_num - 1 > 1 %}<li><a href="{{ blog_page_link(current_page_num - 1) }}">{{ current_page_num - 1 }}</a></li>{% endif %}
+        <li class="active"><a href="{% if current_page_num==1 %}{{ group.absolute_url }}{% else %}{{ blog_page_link(current_page_num) }}{% endif %}">{{ current_page_num }}</a></li>
+        {% if current_page_num + 1 <= total_pages %}<li><a href="{{ blog_page_link(current_page_num + 1) }}">{{ current_page_num + 1 }}</a></li>{% endif %}
+        {% if current_page_num + 2 <= total_pages %}<li><a href="{{ blog_page_link(current_page_num + 2) }}">{{ current_page_num + 2 }}</a></li>{% endif %}
+        {% if current_page_num <= 2 %}
+            {% if current_page_num + 3 <= total_pages %}<li><a href="{{ blog_page_link(current_page_num + 3) }}">{{ current_page_num + 3 }}</a></li>{% endif %}
+        {% endif %}
+        {% if current_page_num == 1 %}
+            {% if current_page_num + 4 <= total_pages %}<li><a href="{{ blog_page_link(current_page_num + 4) }}">{{ current_page_num + 4 }}</a></li>{% endif %}
+        {% endif %}
+        <li class="{% if current_page_num == total_pages %}disabled{% endif %}"><a href="{{blog_page_link(next_page_num)}}"><i class="fa fa-angle-double-right"></i></a></li>
+      </ul>
+    </nav>
+    {% endif %} 
+    <!-- end setup -->
+
+    {% module "module_153050244734957" module_id="2500806" label="2018 - Global Footer" %}
+
+    <!-- hs -->
+    {{ standard_footer_includes|cut('/hs/hsstatic/cos-i18n/static-1.10/bundles/project.js')|cut('/hs/hsstatic/content_shared_assets/static-1.4077/js/public_common.js') }}
+    <!-- /hs -->
+    <script
+    src="https://code.jquery.com/jquery-1.12.4.min.js"
+    integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+    crossorigin="anonymous"></script>
+    <script src="{{ get_public_template_url('Custom/Page/2018/Blog/assets/js/main.js') }}" defer></script>
+  </body>
+</html>

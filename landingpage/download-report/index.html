@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1,width=device-width,user-scalable=no,maximum-scale=1">  
+    <title>{{ content.html_title }}</title>
+    <meta name="description" content="{{ content.meta_description }}">
+    {{ standard_header_includes }}
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" 
+          media="screen" href="{{ get_public_template_url('Custom/Page/2018/Landing_Page/assets/css/download-report.css') }}" />
+  </head>
+  <body>
+    <header>
+      <div class="logo">
+        <img src="http://www.tinypulse.com/hubfs/tinypulse-logo-white.png" alt="TINYpulse Logo" />
+      </div>
+      <div class="container">
+        {% module "module_152956628819770" module_id="3099946" label="Intro" %}
+      </div>
+    </header>
+    <div class="main-content">
+      <div class="container">
+        <div class="scrollable">
+          <div class="content-wrapper">
+            <div class="scrollable-content">
+              {% module "module_1529570473763229" module_id="3102645" label="Main Content" %}
+              {% module "module_1529567949826153" module_id="3102093" label="Quote" %}
+              <div class="social-tools">
+                {% module "module_152989452018241" module_id="1155241" label="Social Sharing" %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="{{ get_public_template_url('Custom/Page/2018/Landing_Page/assets/js/download-report.js') }}"></script>
+    {{ standard_footer_includes }}
+  </body>
+</html>
+<!-- test -->

@@ -1,0 +1,5 @@
+{
+  "scripts": {
+    "create": "cp -R new-project/ $name"
+  }
+}

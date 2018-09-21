@@ -1,0 +1,141 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="initial-scale=1,width=device-width,user-scalable=no,maximum-scale=1">
+    <meta name="author" content="{{ meta_author }}">
+    <meta name="description" content="{{ page_meta.meta_description }}">
+    <meta name="generator" content="HubSpot">
+    <title>{{ page_meta.html_title }}</title>
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ get_public_template_url('Custom/Page/2018/Blog/assets/css/blog-post.css') }}">
+    <!-- hs -->
+    {{ standard_header_includes|cut('/hs/hsstatic/jquery-libs/static-1.4/jquery/jquery-1.11.2.js')|cut('/hs/hsstatic/content_shared_assets/static-1.4077/css/public_common.css')|cut('https://fonts.googleapis.com/css?family=Lato:300,400,700')|cut('//platform.linkedin.com/in.js')|cut("hsjQuery = window['jQuery']") }}
+    <!-- /hs -->
+
+  </head>
+  <body class=" {{ builtin_body_classes }} show-table-of-contents">
+    {% module "module_153256898998711" module_id="3435629" label="Blog - Feedback Button" %}
+    <!-- mobile header module -->
+    {% module "module_153050250773974" module_id="2514054" label="Redesign 2018 - Mobile Header" %}
+    <!-- main header modulde -->
+    {% module "module_153050256659190" module_id="2497045" label="2018 - Homepage Header" %}
+    
+    <!-- content -->
+    {% image "intro_bg" label='Hero Image', src='https://cdn2.hubspot.net/hubfs/443262/2018/blog-page/main-blog-hero.jpg',
+    export_to_template_context=True %}
+    <div class="main-content">
+      <div class="table-of-contents-wrapper" id="table-of-contents">
+        <div class="table-of-contents">
+          <ul>
+            
+          </ul>
+        </div>
+        <a href="#" data-role="trigger-toc">Table of Contents</a>
+      </div>
+      <div class="intro-block" style="background-image:url('{{ widget_data.intro_bg.src }}');">
+        <div class="container">
+          <div class="text-content">
+            <h1 class="blog-title">{{ content.name }}</h1>
+            <div class="post-meta">
+              <ul>
+                <li>By <span>{{ content.blog_post_author.display_name }}</span></li>
+                <li class="date">{{ post.publish_date_local_time|datetimeformat('%b %e') }}</li>
+                <li class="reading-time">
+                  <span>{{ content.post_body|wordcount|divide(200) }} min read</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="post-content-wrapper">
+        <!-- social sharing -->
+        <div class="post-tools-wrapper" id="{{ content.id }}">
+          {% module "module_153145305964060" module_id="3393658" label="Blog Post - Social Sharing" %}
+        </div>
+        <div class="container">
+          <div class="post-body">
+            {{ content.post_body }}
+          </div>
+
+          <div class="about-author">
+            <div class="avatar">
+              <a href="{{ content.blog_post_author.slug }}"><img src="{{ content.blog_post_author.avatar }}" alt="" width="210" height="210"></a>
+            </div>
+            <div class="bio">
+              <p>WRITTEN BY</p>
+              <h3><a href="{{ content.blog_post_author.slug }}">{{ content.blog_post_author.display_name }}</a></h3>
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In nec ante auctor, dictum mi tempor, elementum mauris. Donec luctus aliquet turpis, non pretium nulla hendrerit a. Aliquam eu lobortis nulla.</p>
+            </div>            
+          </div>
+        </div>
+      </div>
+
+      {% set related_posts = blog_popular_posts('default', 5, topic.slug) %}
+      {% set pos = 1 %}
+      <div class="related-posts content-block">
+        <div class="container">
+          <h2>You Might Also Like</h2>
+          <div class="recent-posts posts-list">
+            {% for post in related_posts %}
+              {% unless content.absolute_url == post.absolute_url %}
+                {% if pos <= 3 %}
+                  {% set pos = pos + 1 %}
+                  <div class="post" id="{{ post.id }}">
+                    <div class="thumb">
+                      <div class="img"></div>
+                      <noscript><img src="{{ post.featured_image }}" width="690" /></noscript>
+                      <div class="date">{{ post.publish_date_local_time|datetimeformat('%b %e') }}</div>
+                      <div class="topic">
+                        {% for topic in post.topic_list %}
+                          {% if loop.index == 1 %}
+                            <a href="{{ blog_tag_url(group.id, topic.slug) }}">{{ topic.name }}</a>
+                          {% endif %}
+                        {% endfor %}
+                      </div>
+                    </div>
+                    <div class="post-content">
+                      <h3 class="post-title"><a href="{{ post.absolute_url }}">{{ post.name }}</a></h3>
+                      <p class="post-desc">{{ post.post_list_content|striptags|trim }}</p>
+                    </div>
+                    <div class="post-meta">
+                      <ul>
+                        <li class="author">
+                          <img src="{{ post.blog_post_author.avatar }}" alt="" width="64" height="64">
+                          <a href="{{ blog_author_url(group.id, post.blog_post_author.slug) }}">{{ post.blog_post_author.display_name }}</a>
+                        </li>
+                        <li class="reading-time">
+                          <span>{{ post.post_body|wordcount|divide(200) }} min read</span>
+                        </li>
+                        <li class="save-post">
+                          <a href="#"><i class="not-saved-icon far fa-bookmark"></i><i class="fas fa-bookmark saved-icon"></i></a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                {% endif %}
+              {% endunless %}
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- // content -->
+    {% module "module_153050244734957" module_id="2500806" label="2018 - Global Footer" %}
+    <script
+    src="https://code.jquery.com/jquery-1.12.4.min.js"
+    integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+    crossorigin="anonymous"></script>
+    <script src="{{ get_public_template_url('Custom/Page/2018/Blog/assets/js/main.js') }}"></script>
+
+    <!-- hs -->
+    {{ standard_footer_includes|cut('/hs/hsstatic/cos-i18n/static-1.10/bundles/project.js') }}
+    <!-- /hs -->
+  </body>
+</html>

@@ -1,0 +1,17 @@
+/base-config/*
+.DS_Store
+/node_modules
+*/node_modules
+*/*/node_modules
+*/.sass-cache
+*/*/.sass-cache
+package-lock.json
+*/package-lock.json
+*/*/package-lock.json
+*.log
+websitepage/david-niu-bio-page/.sass-cache
+websitepage/david-niu-bio-page/node_modules
+websitepage/integrations/.sass-cache
+websitepage/integrations/node_modules
+landingpage/download-report/.sass-cache
+landingpage/download-report/node_modules
